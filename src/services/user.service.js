@@ -14,7 +14,7 @@ module.exports = class UserServices {
         } catch (error) {
             console.log(error);
             return error.message;
-        }
+        }   
     };
     async getUserById(id){
         try {

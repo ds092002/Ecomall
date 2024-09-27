@@ -5,15 +5,15 @@ const bcryptjs = require('bcryptjs')
 
 exports.registerUser = async (req, res) => {
     try {
-        let user = await UserService.getUser({user: req.body.userName, email: req.body.email});
-        console.log(user);
+        console.log("Body ====>", req.body);
+        let user = await userService.getUser({userName: req.body.userName, email: req.body.email});
+        // console.log(user);
         if (user) {
             return res.status(400).json({message: `User is Already Registered....👍🏻`});
         }
-        console.log(user);
-        if (req.file) {
-            console.log(req.file);
-        }
+        // if (req.file) {
+        //     console.log(req.file);
+        // }
         let hashPassword = await bcryptjs.hash(req.body.password, 7);
         console.log(hashPassword);
         user = await userService.addNewUser({

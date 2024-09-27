@@ -6,9 +6,11 @@ require('dotenv').config();
 const port = process.env.PORT;
 const morgon = require('morgan');
 const path = require('path');
+const cors = require('cors');
 
-app.use(express.json());
+app.use(cors());
 app.use(morgon('dev'));
+app.use(express.json());
 
 /*--------------Admin Routes--------------*/
 
