@@ -24,6 +24,14 @@ module.exports = class UserServices {
             return error.message;
         }
     };
+    async getAllUsers(body){
+        try {
+            return await User.find(body);
+        } catch (error) {
+            console.log(error);
+            return error.message;
+        }
+    };
     async updateUser(id, body) {
         try {
             return await User.findByAndUpdate(id, {$set: body}, {new: true})
