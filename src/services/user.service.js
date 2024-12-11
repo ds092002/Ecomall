@@ -14,11 +14,19 @@ module.exports = class UserServices {
         } catch (error) {
             console.log(error);
             return error.message;
-        }
+        }   
     };
     async getUserById(id){
         try {
             return await User.findById(id);
+        } catch (error) {
+            console.log(error);
+            return error.message;
+        }
+    };
+    async getAllUsers(body){
+        try {
+            return await User.find(body);
         } catch (error) {
             console.log(error);
             return error.message;
