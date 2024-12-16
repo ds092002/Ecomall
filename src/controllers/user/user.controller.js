@@ -87,18 +87,43 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-exports.getProfile = async (req, res) => {
+exports.logoutUser = (req, res) => {
     try {
-        let user = await userService.getUserById(req.query.userId);
-        if (!user) {
-            return res.status(404).json({ message: `User not found....`})
-        }
-        res.status(200).json(user);
+      // Here, you can add any logic for invalidating tokens or sessions if needed
+      // For example, you could store blacklisted tokens or invalidate a session here (optional)
+      
+      // Respond with success message
+      res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: `Internal Server Error...` });
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-};
+  };
+
+  exports.getProfile = async (req, res) => {
+    try {
+      // Validate that the userId exists
+      const userId = req.query.userId;
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required." });
+      }
+  
+      // Fetch user by ID
+      const user = await userService.getUserById(userId);
+  
+      // Handle case where user is not found
+      if (!user) {
+        return res.status(404).json({ message: "User not found." });
+      }
+  
+      // Return user details
+      res.status(200).json(user);
+    } catch (error) {
+      console.error("Error in getProfile:", error);
+      res.status(500).json({ message: "Internal Server Error." });
+    }
+  };
+  
 
 exports.deleteProfile = async (req, res) => {
     try {
