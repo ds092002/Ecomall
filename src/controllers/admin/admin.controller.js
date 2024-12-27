@@ -69,10 +69,66 @@ exports.getAdmin = async (req, res) => {
         if (!admin) {
             return res.status(404).json({message:`Admin data not found please try again.....!`})
         }
-        admin = await adminService.updateUser(admin._id,{...req.body});
-        res.status(201).json({admin, message:`Admin updated successfully`})
+        res.status(200).json(admin)
     } catch (error) {
         console.log(error);
         res.status(500).json({message: `Internal Server Error.${console.error()}`})        
+    }
+}
+
+exports.updateAdmin = async (req, res) => {
+    try {
+        let admin = await adminService.getUserById(req.query.adminId);
+        console.log(admin);
+        if (!admin) {
+            return res.status(404).json({ message:`Admin data not found please try again....!`});
+        }
+        admin = await adminService.updateUser(admin._id,{...req.body})
+        res.status(201).json({admin, message:`Admin Updated successfully....`})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message:`Internal Server Error...${console.error()}`})
+    }
+}
+
+exports.deleteAdmin = async (req, res) => {
+    try {
+        let admin = await adminService.getUserById(req.query.adminId);
+        if(!admin){
+            return res.status(404).json({ message:`Admin Data not found please try again`})
+        }
+        admin = await adminService.updateUser(admin._id,{isDelete: true})
+        res.status(200).json({message: `Admin Deleted Successfully...`})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Ine=ternal Server Error ${console.error()}`})
+    }
+}
+
+exports.upadetPassword = async (req, res) => {
+    try {
+        let admin = await adminService.getUserById(req.admin._id)
+        if(!admin){
+            return res.status(404).json({message: `Admin data not found please try again`})
+        }
+        let comaparePassword = await bcryptjs.compare(
+            req.body.oldPassword,
+            admin.password
+        )
+        if (!comaparePassword) {
+            return res.status(404).json({message: `Old Password was not match please insert correct password`})
+        }
+        if (req.body.newPassword === req.body.oldPassword) {
+            return res.status(404).json({ message: `New password and old paswword arre same please enter diffrent password`})
+        }
+        if (req.body.newPassword !== req.body.confirmPassword) {
+            return res.status(404).json({ message: `New password and confirm password are not same`})
+        }
+        let hashPassword = await bcryptjs.hash(req.body.newPassword, 10);
+        admin = await adminService.updateUser(req.admin._id,{ password: hashPassword})
+        res.status(200).json({admin, message: `Password changes successfully......`})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Internal server error ${console.error()}`})
     }
 }
