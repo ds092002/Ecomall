@@ -18,6 +18,8 @@ app.use((req, res, next) => {
 });
 
 /*--------------Admin Routes--------------*/
+const adminRoutes = require('./routes/admin/index.routes')
+app.use('/api/admin', adminRoutes)
 
 /*--------------User Routes--------------*/
 const usersRoutes = require('./routes/users/index.routes')
